@@ -6,7 +6,7 @@ using Shared.Contexts;
 var builder = Host.CreateDefaultBuilder();
 
 builder.ConfigureServices(services => {
-    services.AddDbContext<DataContext>(x => x.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\YH\yh-datalagring\inlamningsuppgift\DatabaseManagement\Shared\Data\localDB.mdf;Integrated Security=True;Connect Timeout=30"));
+    services.AddDbContext<DataContext>(x => x.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\YH\04-Datalagring\inlamningsuppgift\DatabaseManagement\Shared\Data\localDB.mdf;Integrated Security=True;Connect Timeout=30"));
 });
 
 builder.Build();
