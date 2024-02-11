@@ -1,44 +1,61 @@
-﻿
-using Shared.Entities;
+﻿using Shared.Entities;
 using Shared.Repositories;
 using System.Diagnostics;
 
-namespace Shared.Services {
-    public class ProductService(ProductRepository productRepository, CategoriesRepository categoryRepository) {
-        private readonly ProductRepository _productRepository = productRepository;
-        private readonly CategoriesRepository _categoryRepository = categoryRepository;
+namespace Shared.Services;
 
-        public bool Create(
-            string articleNumber,
-            string name,
-            decimal price,
-            string categoryName,
-            int thumbnailImageId = -1,
-            string ingress = null!,
-            string description = null!,
-            string detailedSpecsJson = null!
-        ) {
+public class ProductService(ProductRepository productRepository, CategoriesRepository categoryRepository) {
+    private readonly ProductRepository _productRepository = productRepository;
+    private readonly CategoriesRepository _categoryRepository = categoryRepository;
 
-            try {
-                if (!_productRepository.Exists(x => x.ArticleNumber == articleNumber)) {
-                    var tCategory = _categoryRepository.GetOne(x => x.Name == categoryName);
-                    tCategory ??= _categoryRepository.Create(new CategoriesEntity { Name = categoryName });
+    public bool Create(
+        string articleNumber,
+        string name,
+        decimal price,
+        string categoryName,
+        int thumbnailImageId = -1,
+        string ingress = null!,
+        string description = null!,
+        string detailedSpecsJson = null!
+    ) {
 
-                    var tProduct = new ProductEntity {
-                        ArticleNumber = articleNumber,
-                        Name = name,
-                        ThumbnailImageId = thumbnailImageId,
-                        Ingress = ingress,
-                        Description = description,
-                        DetailedSpecsJSON = detailedSpecsJson,
-                        //Category = tCategory
-                    };
-                }
+        try {
+            if (!_productRepository.Exists(x => x.ArticleNumber == articleNumber)) {
+                var tCategory = _categoryRepository.GetOne(x => x.Name == categoryName);
+                tCategory ??= _categoryRepository.Create(new CategoriesEntity { Name = categoryName });
 
+                var tProduct = new ProductEntity {
+                    ArticleNumber = articleNumber,
+                    Name = name,
+                    ThumbnailImageId = thumbnailImageId,
+                    Ingress = ingress,
+                    Description = description,
+                    DetailedSpecsJSON = detailedSpecsJson,
+                    //Category = tCategory
+                };
+
+                _productRepository.Create(tProduct);
                 return true;
-            } catch (Exception e) { Debug.WriteLine(e); }
+            }
 
-            return false;
-        }
+        } catch (Exception e) { Debug.WriteLine(e); }
+
+        return false;
+    }
+
+    public IEnumerable<ProductEntity> GetAll() {
+        return _productRepository.GetAll();
+    }
+
+    public ProductEntity GetOne(string articleNumber) {
+        return _productRepository.GetOne(x => x.ArticleNumber == articleNumber);
+    }
+
+    public bool UpdateProduct(string articleNumber, ProductEntity updatedEntity) {
+        return _productRepository.UpdateEntity(x => x.ArticleNumber == articleNumber, updatedEntity);
+    }
+
+    public bool RemoveProduct(string articleNumber) {
+        return _productRepository.RemoveEntity(x => x.ArticleNumber == articleNumber);
     }
 }

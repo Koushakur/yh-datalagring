@@ -7,6 +7,7 @@ namespace Shared.Entities;
 public class ReviewsEntity {
 
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required]

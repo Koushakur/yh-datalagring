@@ -16,11 +16,21 @@ namespace Shared.Contexts {
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
             modelBuilder.Entity<CurrencyEntity>()
-                .HasIndex(x => x.Name)
+                .HasIndex(c => c.Name)
                 .IsUnique();
 
             modelBuilder.Entity<ImagesEntity>()
-                .Property(e => e.Id).ValueGeneratedOnAdd();
+                .Property(i => i.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<CategoriesEntity>()
+                .Property(i => i.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ReviewsEntity>()
+                .Property(i => i.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ImagesEntity>()
+                .HasIndex(i => i.ContentURL)
+                .IsUnique();
 
             //modelBuilder.Entity<ProductImagesEntity>()
             //    .HasKey(nameof(ProductImagesEntity.ArticleNumber), nameof(ProductImagesEntity.ImageId));
